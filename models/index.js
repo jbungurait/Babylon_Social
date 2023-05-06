@@ -1,3 +1,4 @@
-const Babylon = require('./Babylon');
+const Users = require('./Users');
+const Thoughts = require('./Thoughts');
 
-module.exports = { Babylon };
+module.exports = { Users, Thoughts };
