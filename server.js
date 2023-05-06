@@ -14,5 +14,3 @@ db.once('open', () => {
         console.log(`Server running at Port ${PORT}!`)
     });
 });
-
-

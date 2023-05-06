@@ -1,4 +1,4 @@
-const { Users, Thoughts } = require('../models');
+const { Thoughts } = require('../models');
 
 module.exports = {
     async getThoughts(req, res) {
@@ -52,5 +52,49 @@ module.exports = {
         } catch (err) {
 
         }
+    },
+    async deleteThought (req,res) {
+        try {
+            const thought = await Thoughts.findByIdAndDelete(
+                {_id: req.params.thoughtId});
+            if (!thought) {
+                res.status(404).json({message: 'No thought found.'})
+            }
+            res.json({message: 'Entry deleted.'});
+        } catch (err) {
+            res.status(500).json(err); 
+        }
+    },
+    async createReaction(req, res) {
+        try {
+            const thought = await Thoughts.findByIdAndUpdate(
+                { _id: req.params.thoughtId},
+                { $pull: {reactions}},
+                { runValidators: true, new: true},
+                );
+
+                if (!thought) {
+                    res.status(404).json('No reaction found.');
+                }
+                res.json(thought);
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
+    async deleteReaction(req, res) {
+        try {
+            const thought = await Thoughts.findByIdAndDelete(
+                { _id: req.params.thoughtId},
+                { $pull: {reactions}},
+                { runValidators: true, new: true},
+            );
+            if (!thought) {
+                res.status(404).json({message: 'No thought found.'});
+            }
+
+            res.json(thought);
+        } catch (err) {
+            res.status(500).json(err);
+        }
     }
-};
+}; 

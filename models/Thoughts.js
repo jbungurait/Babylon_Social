@@ -1,30 +1,21 @@
 const { Schema, model } = require("mongoose");
-
-const reactionsSchema = new Schema({
-    reactionId: {},
-    reactionBody: { type: String, required: true, validate: [length, 280] },
-    username: { type: String, required: true },
-    createdAt: {
-      type: Date,
-      get: (date) => {
-        if (date) return date.toISOString().split("T")[0];
-      },
-    },
-  });
-  
-  const Reactions = model('Reactions', reactionsSchema);
+const Reactions = require("./Reactions").schema;
 
 const thoughtsSchema = new Schema(
   {
-    thoughtText: { type: String, required: true, validate: [length, 1 - 280] },
+    thoughtText: { 
+      type: String, 
+      required: true, 
+      minlength: 1, 
+      maxlength: 280 },
     createdAt: {
       type: Date,
       get: (date) => {
         if (date) return date.toISOString().split("T")[0];
       },
     },
-    username: { type: String, required: true, refrences: [User] },
-    reactions: [{ type: Schema.Types.ObjectId, ref: 'Reactions' }],
+    username: { type: String, required: true, refrences: 'Users' },
+    reactions: [Reactions],
   },
   {
     toJSON: {
