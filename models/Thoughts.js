@@ -1,5 +1,6 @@
-const { Schema, model } = require("mongoose");
-const Reactions = require("./Reactions").schema;
+const { Schema, model, Types } = require("mongoose");
+const reactionsSchema = require("./Reactions");
+
 
 const thoughtsSchema = new Schema(
   {
@@ -14,8 +15,8 @@ const thoughtsSchema = new Schema(
         if (date) return date.toISOString().split("T")[0];
       },
     },
-    username: { type: String, required: true, refrences: 'Users' },
-    reactions: [Reactions],
+    username: [{ type: String, required: true }],
+    reactions: [reactionsSchema],
   },
   {
     toJSON: {

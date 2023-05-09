@@ -15,7 +15,8 @@ module.exports = {
                 .select('-__v');
 
             if (!user) {
-                return res.status(404).json({message: 'No user by that Id.'});
+                res.status(404).json({message: 'No user by that Id.'});
+                return;
             }
 
             res.json(user);
@@ -41,6 +42,7 @@ module.exports = {
                 );
             if (!user) {
                 res.json({message: 'No user by that Id.'});
+                return;
             };
 
             res.json(user);
@@ -50,10 +52,11 @@ module.exports = {
     },
     async deleteUser(req, res) {
         try {
-            const user = await Users.findOneAndDelete({_id: req.params.userId});
+            const user = await Users.findOneAndRemove({_id: req.params.userId});
 
             if (!user) {
                 res.status(404).json({message: 'No user by that Id.'});
+                return;
             }
             await Thoughts.deleteMany({_id: {$in: user.thoughts}});
             res.json({message: 'User and data delted.'});
@@ -66,15 +69,18 @@ module.exports = {
         try {
             const user = await Users.findOneAndUpdate(
                 { _id: req.params.userId},
-                { $pull: {friends: { friendId: req.params.friendId}}},
-                { runValidators: true, new: true });
+                // { $unwind: {friends}},
+                { $addToSet: {friends: req.params.friendId}},
+                { new: true });
 
                 if (!user) {
                     res.status(404).json({message: 'No user by that Id.'});
+                    return;
                 };
 
                 res.json(user);
         } catch (err) {
+            console.log(err);
             res.status(500).json(err);
         }
     },
@@ -82,11 +88,12 @@ module.exports = {
         try {
             const user = await Users.findOneAndUpdate(
                 { _id: req.params.userId},
-                { $pull: {friends: { friendId: req.params.friendId}}},
-                { runValidators: true, new: true });
+                { $pull: {friends: req.params.friendId}},
+                { new: true });
 
             if (!user) {
                 res.status(404).json({message: 'No user by that Id.'});
+                return;
             }
             res.json(user);
         } catch (err) {
