@@ -28,12 +28,11 @@ THEN I am able to successfully create and delete reactions to thoughts and add a
 
 
 ## Usage
-```md
-This app is back end based. To use the app dowload the repository from GitHub. 
-Once the app has dowloaded run npm install to install the neccessary packages that run the program. 
+This app is back end based. To use the app, download the repository from GitHub. 
+Once the app has dowloaded run `npm install` to install the neccessary packages that run the program. 
 After the packages have installed run the `npm run start` comand in the cli to start the server. 
 From there you will need Insomnia or similar programs to send requests to the server. 
-```
+
 
 
 ## Video 
